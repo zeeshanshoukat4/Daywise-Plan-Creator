@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Pilot / SOP Daywise Plan Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#eef1f6;--c:#fff;--t:#0f172a;--m:#64748b;--b:#dbe1ea;--a:#2563eb;--f:#f8fafc;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--c:#131a2b;--t:#e7ecf5;--m:#94a3b8;--b:#27324a;--f:#1a2338;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b1020;--c:#131a2b;--t:#e7ecf5;--m:#94a3b8;--b:#27324a;--f:#1a2338;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--t);font:13px/1.45 "Segoe UI",system-ui,Roboto,Arial,sans-serif;display:flex}
+#ed{width:420px;flex:none;overflow:auto;background:var(--bg);border-right:1px solid var(--b);padding:0 14px 28px}
+#ed>h1{position:sticky;top:0;z-index:5;margin:0 -14px 12px;padding:14px;font-size:17px;font-weight:700;color:#fff;background:linear-gradient(120deg,#2563eb,#7c3aed 55%,#db2777)}
+#pv{flex:1;min-width:0;overflow:auto;padding:14px}
+label{display:block;color:var(--m);font-size:11.5px;font-weight:600;margin:9px 0 3px}
+input,select{width:100%;color:var(--t);border:1.5px solid color-mix(in srgb,var(--sc,var(--a)) 40%,var(--b));background:color-mix(in srgb,var(--sc,var(--a)) 6%,var(--c));border-radius:8px;padding:6px 9px;font:inherit;min-height:34px}
+select{font-weight:500;cursor:pointer}
+input:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--sc,var(--a)) 35%,transparent);border-color:var(--sc,var(--a))}
+button{background:var(--sc,var(--a));color:#fff;border:1.5px solid var(--sc,var(--a));border-radius:8px;padding:6px 12px;font:inherit;font-weight:600;cursor:pointer;min-height:34px}
+button:hover{filter:brightness(1.08)}
+button.g,.fl{background:var(--c);color:var(--sc,var(--a));border-color:color-mix(in srgb,var(--sc,var(--a)) 40%,var(--b))}
+button.x{background:transparent;color:#dc2626;border-color:transparent;padding:4px 8px;min-height:28px}
+small{color:var(--m);display:block;margin:4px 0}
+.row{display:flex;gap:8px;align-items:flex-end}.row>*{flex:1;min-width:0}.row>.s{flex:none}
+.sec{border:1px solid var(--b);border-radius:14px;margin:14px 0;overflow:hidden;background:var(--c);box-shadow:0 2px 8px #0f172a14}
+.sec>h2{margin:0;padding:10px 14px;background:var(--sc);color:#fff;font-size:13px;font-weight:700}
+.sec>.bd{padding:4px 14px 14px}
+.card{border:1px solid var(--b);border-radius:10px;padding:10px;margin:10px 0;background:var(--f)}
+.it{display:grid;grid-template-columns:1fr 1fr;gap:2px 8px;margin-top:10px;padding:8px 10px;border-left:5px solid var(--ic,var(--sc));border-radius:8px;background:color-mix(in srgb,var(--ic,var(--sc)) 12%,var(--c))}
+.it .w,.it button{grid-column:1/3}.it button{justify-self:end}
+.top{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.top select{flex:1;min-width:150px}
+.fl{display:inline-flex;align-items:center;margin:0;padding:6px 12px;border:1.5px solid;border-radius:8px;cursor:pointer;min-height:34px;font-size:13px}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.kpi div{background:var(--k);color:#fff;border-radius:12px;padding:8px 6px;text-align:center;font-size:11px;font-weight:600}
+.kpi b{display:block;font-size:22px;line-height:1.1}
+.warn,.ok{border-radius:10px;padding:8px 12px;margin:10px 0;font-size:12px}
+.warn{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}.ok{background:#dcfce7;color:#166534;border:1px solid #86efac;font-weight:600}
+.warn button{margin-top:6px;--sc:#dc2626}
+.zb{display:flex;gap:6px;align-items:center;margin-bottom:10px;position:sticky;left:0;top:0}.zb span{min-width:42px;text-align:center;color:var(--m)}.zb button{padding:3px 10px;min-height:28px}
+/* sheet: fixed 1600px design width, identical on screen and in print */
+#sh{background:#fff;color:#000;width:1600px;padding:8px;font-family:Calibri,Carlito,"Segoe UI",Arial,sans-serif;box-shadow:0 1px 8px #0003}
+.ap{display:flex;border:1px solid #000}
+.ap div{flex:1;border-right:1px solid #000;text-align:center;font-size:7.5px;font-weight:700;line-height:1.15;min-height:46px;display:flex;align-items:flex-end;justify-content:center;padding:2px 1px}
+.ap div:last-child{border-right:0}
+.tt{position:relative;margin:7px 0 5px;line-height:1.25}.tt b{display:block;font-size:15px}.tt span{display:block;font-size:10.5px;font-weight:700}
+.tt .d{position:absolute;right:0;bottom:0;text-decoration:underline}
+.hd,.r{display:flex}
+.hd{border:1px solid #000;background:#e9e9e9}
+.r{height:46px;border:1px solid #000;border-top:0;border-bottom:1px solid #8a8a8a}
+#bd .r:last-of-type{border-bottom:1px solid #000}
+.c1,.c2,.c3{font-size:8.5px;font-weight:700;line-height:1.15;padding:2px 4px;display:flex;align-items:center;border-right:1px solid #8a8a8a;overflow:hidden}
+.hd .c1,.hd .c2,.hd .c3{font-size:9px;justify-content:center}
+.c1{width:2.2%;justify-content:center}.c2{width:15%}.c3{width:7%;justify-content:center;text-align:center}
+.tl{flex:1;position:relative;min-width:0}
+.tl .mo{display:flex;height:13px;border-bottom:1px solid #8a8a8a}
+.mo b{font-size:9px;line-height:12px;text-align:center;border-right:1px solid #000;overflow:hidden;white-space:nowrap}
+.tl .l{display:flex;height:12px;overflow:hidden}
+.tl .l i{flex:none;font-style:normal;font-weight:700;text-align:center;font-size:8px;line-height:11px;overflow:hidden;border-right:1px solid #8a8a8a;border-bottom:1px solid #8a8a8a}
+.tl i.we,.tl u.we{background:#c9c9c9}
+.tl u{position:absolute;top:0;bottom:0;text-decoration:none}
+.tl u.h{background:#fde5c8;opacity:.85}.tl u.gl{border-right:1px solid #8a8a8a}
+.bar{position:absolute;height:15px;border:.7px solid #444;font-size:8px;font-weight:700;display:flex;align-items:center;white-space:nowrap;padding:0 2px;z-index:2;min-width:3px}
+.mk{position:absolute;font-size:14px;line-height:1;font-style:normal;z-index:2}
+.mk s{text-decoration:none;font-size:8px;font-weight:700;margin-left:1px;white-space:nowrap;vertical-align:middle}
+.aw{position:absolute;z-index:2}
+.aw b{position:absolute;left:0;top:0;font-size:8px;line-height:10px;white-space:nowrap}
+.aw .al{position:absolute;left:0;right:0;bottom:2px;border-top:1px solid #000}
+.aw .al:before,.aw .al:after{content:'';position:absolute;top:-3.5px;border:3px solid transparent}
+.aw .al:before{left:-1px;border-right:5px solid #000;border-left:0}.aw .al:after{right:-1px;border-left:5px solid #000;border-right:0}
+.co{position:absolute;z-index:3;display:flex;flex-direction:column;align-items:flex-start}
+.cb{border:.7px solid #000;font-size:7.5px;font-weight:700;padding:1px 3px;line-height:1.15;white-space:nowrap;width:100%}
+.co.wr .cb{white-space:normal}
+.co q{font-size:10px;line-height:8px;height:8px;quotes:none;margin-left:-1px}
+.r .tl{overflow:hidden}
+.tx{position:absolute;font-size:8.5px;font-weight:700;line-height:1.15;text-align:center;white-space:nowrap;z-index:2}
+#bd{position:relative}#ov{position:absolute;left:24.2%;right:0;top:0;bottom:0;pointer-events:none}
+.hl{position:absolute;writing-mode:vertical-rl;font-size:9px;font-weight:700;z-index:4;text-align:center;background:#fff;border:.7px solid #000;padding:3px 1px}
+.hl.h{writing-mode:horizontal-tb;padding:2px}
+.ft{display:flex;gap:16px;margin-top:8px;align-items:flex-start;font-size:8px}
+.rm{flex:1;font:8px/1.45 Calibri,Carlito,Arial,sans-serif}
+table.v{border-collapse:collapse;font-size:7.5px}table.v td,table.v th{border:1px solid #000;padding:1px 4px;white-space:nowrap}table.v th{background:#e9e9e9}
+.fo{display:flex;justify-content:space-between;margin-top:6px;font-size:9px;font-weight:700}
+@media(max-width:800px){body{display:block;height:auto}#ed{width:auto;border:0}#pv{padding:8px}}
+@media print{
+@page{size:A3 landscape;margin:6mm}
+html,body{height:auto;background:#fff;display:block}#ed,.noprint{display:none!important}
+#pv{padding:0;overflow:visible}#sh{box-shadow:none;padding:0;break-inside:avoid}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style></head><body>
+<div id="ed"></div>
+<div id="pv"><div class="zb noprint"><button class="g" onclick="setZ(Z-.1)">−</button><span id="zl"></span><button class="g" onclick="setZ(Z+.1)">+</button><button class="g" onclick="setZ(1)">100%</button><button class="g" onclick="fit()">Fit width</button></div><div id="sh"></div></div>
+<script>
+var SW=1600;
+const MN=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+const COL={o:'#fbd9b0',g:'#b9e3b5',b:'#b8d4f0',r:'#f4b6b6',y:'#fff1a8',k:'#bdbdbd',w:'#fff'};
+const PRE=[["CKD KIT FOR PILOT/ SOP (ETA PSMC)","POD / IMD"],["UNPACKING OF PILOT KIT","MHD/QA\nTMD/SHOPS"],["SEPARATE LOCAL ORDER FOR KASHI THROUGH SAP","PO / TMD"],["LOCAL PARTS THROUGH SAP FOR PILOT/SOP","PO/ MHD"],["INSPECTION, REPORT PREPARATION & SUBMISSION OF LOCAL PARTS","PID"],["PSMC PILOT APPROVAL","SMC/QA"],["CHECKAI MEETING","WELD/PAINT/VFA"],["MEASUREMENT","PID"],["WB ON","WELD"],["WB OK","WELD"],["PB ON","PAINT"],["PB OK","PAINT"],["EG ON","ENGINE"],["EG OK","ENGINE"],["PLASTIC","PLASTIC"],["AB ON","VFA"],["AB OK","VFA"],["FC ON","VID"],["FC OK","VID"],["PRE SDR/DQR","QA"],["SQR/DQR/COLOR MATCHING","QA"],["BODY INTERNAL GAP VERIFICATION","Weld"],["DISPATCH TO SMC (BY SEA)","IMD/TMD"],["NOISE & EMISSION TESTING","TMD/IMD"],["SOP & DELIVERY APPROVAL","SMC/QA"]];
+const D=x=>'2026-'+x;
+const mk=(n,it)=>({n:PRE[n][0],r:PRE[n][1],items:it.map(([t,s,e,l,p,c])=>({t,s:D(s),e:e?D(e):'',l:l||'',p:p||'m',c:c||(t=='c'?'w':'o')}))});
+const G=(a,b,c)=>[['t',a,'','C 7'],['t',b,'','C 1|C 2'],['t',c,'','C 5|C 3|C 4|C 6']];
+const W2=(a,b,c)=>[['t',a,'','C 7|C 1|C 2'],['t',b,'','C 5|C 3|C 4|C 6']];
+const CC={GJC:'Jungle Green(Body) / Super Black (Roof)',GJB:'Ice Grayish Blue (Body) / Super Black (Roof)',F2R:'White (Body)/Super Black (Roof)',FRF:'Silky Silver (Body)/Super Black (Roof)','26U':'White',ED:'Electro Deposition','-':'-'};
+const V=(a,c,o,w)=>({a,v:'YTBN1CXNP42',c,o,w,p:w,t:w});
+const SAMPLE=()=>({
+ title:"YTB ADAS PILOT/SOP DAYWISE SCHEDULE",dept:"TECHNICAL MANAGEMENT DEPARTMENT",div:"PRODUCT DEVELOPMENT & LOCALIZATION DIVISION",rev:"Revision:01",date:"23-July-2026",
+ from:"2026-05-01",to:"2026-11-04",df:"2026-07-15",dt:"2026-08-31",foot:"TMD-01-011|REV-00|JUNE-22",
+ appr:"SEC.HEAD (TMD),HOD (TMD),HOD (LPD),M1J (PD & L),DIV.HEAD (PD & L),M1J (PROC),DIV.HEAD (PROC),HOD (PE),M1J (PE),DIV.HEAD (PE),M1 (PROD),M1 (PROD),DIV.HEAD (PROD),DIV.HEAD (PP&MM),M1J (PID),M1J (QA),DIV.HEAD (QA),M2 (MARKETING),DIV.HEAD (MARKETING),M1 (MKTG. & SALES),DIV.HEAD (SALES),FUNC.HEAD (MKTG. & SALES),FUNC.HEAD (SC),DMD",
+ acts:[
+ mk(0,[['c','05-04','06-05','ETA KHI Port KASHI TRIAL PART SIM & SMC','t'],['c','06-09','06-24','ETA KHI Port PILOT KIT SIM & SMC','t'],['c','05-25','06-20','ETD PILOT KIT SIM & SMC','b'],['c','06-27','07-10','ETA PSMC FOR KASHI TRIAL PART SIM & SMC','t'],['c','07-23','08-05','ETA PSMC PILOT KIT SIM & SMC','t','y']]),
+ mk(1,[['c','06-10','06-18','KASHI PARTS','t'],['a','06-04','06-22','','b'],['a','07-28','08-03','PILOT PARTS','m']]),
+ mk(2,[['a','06-01','06-08','ORDER (KASHI)','m'],['a','06-09','06-24','RECEIVING (KASHI)','m']]),
+ mk(3,[['a','06-08','06-15','ORDER (PILOT PARTS)','m'],['a','06-16','07-07','RECEIVING (PILOT PARTS)','m']]),
+ mk(4,[['c','06-26','07-08','SUBMISSION OF PILOT DOC TO SMC BY QA','t'],['a','06-26','07-08','','b']]),
+ mk(5,[['a','07-08','07-14','SMC PILOT APPROVAL','m'],['m','07-15','','','m']]),
+ mk(6,[['c','07-18','07-23',"Done 23-July'26",'t'],['t','07-24','','C 7|(WB)'],['t','07-26','','C 7|(PB)'],['t','08-10','','C 7|(AB)']]),
+ mk(7,[['c','07-14','07-22',"Measurements Completed 22-July'26",'t'],['t','07-24','','C 7'],['t','07-27','','C 7']]),
+ mk(8,[['c','07-08','07-21',"KASHI TRIAL (08-JULY'26 ~ 21-JULY'26)",'t'],['a','07-08','07-21','','b'],['t','07-22','','WB 13|WB 14'],['t','07-24','','C 7'],['t','07-28','','C 1|C 2'],['t','08-04','','C 5|C 3|C 4|C 6']]),
+ mk(9,[['c','07-20','07-25',"Done 23-July'26",'t'],['t','07-18','','WB 13|WB 14'],['t','07-23','','C 7','b'],['t','07-27','','C 1|C 2'],['t','08-04','','C 5|C 3|C 4|C 6']]),
+ mk(10,[['t','07-08','','ED only'],['t','07-18','','WB 13|WB 14'],['c','07-20','07-25',"Done 23-July'26",'t'],['t','07-24','','C 7','b'],['t','07-27','','C 1|C 2'],['t','08-05','','C 5|C 3|C 4|C 6']]),
+ mk(11,G('07-27','07-31','08-06')),mk(12,G('07-22','07-29','08-05')),mk(13,G('07-22','07-29','08-05')),mk(14,G('07-22','07-29','08-05')),
+ mk(15,true?[['t','08-04','','C 7|C 1|C 2'],['t','08-10','','C 5|C 3|C 4|C 6'],['c','09-03','09-30','SOP AB ON (03-SEP-2026 Tentative)','m']]:[]),
+ mk(16,[['t','08-06','','C 7|C 1|C 2'],['t','08-12','','C 5|C 3|C 4|C 6']]),
+ mk(17,[['t','08-06','','C 7|C 1|C 2'],['t','08-12','','C 5|C 3|C 4|C 6']]),
+ mk(18,[['t','08-06','','C 7|C 1|C 2'],['t','08-12','','C 5|C 3|C 4|C 6']]),
+ mk(19,[['t','08-12','','C 1|C 2|C 5']]),
+ mk(20,[]),
+ mk(21,[['c','08-12','08-24','BODY INTERNAL GAP VERIFICATION','t'],['a','08-12','08-24','','b']]),
+ mk(22,[['c','08-17','08-23','HANDED OVER TO IMD','t'],['t','08-24','','C 1'],['c','08-26','09-01','ETD PSMC','t'],['c','09-02','09-12','ETD KHI PORT (SEA) (02-09-2026)','t'],['t','09-02','','C 1','b'],['c','10-05','10-14','ETA JAPAN PORT','t'],['t','10-07','','C 1','b']]),
+ mk(23,[['c','06-10','07-08','YTB Non-ADAS (CXJ) Pilot COP results are OK; therefore, YTB ADAS (CXN) Pilot will follow CXJ COP results,','m']]),
+ mk(24,[['c','08-24','09-05','SUBMISSION OF SOP DOC TO SMC BY QA','b'],['c','09-07','09-22','SOP APPROVAL FROM SMC','m'],['c','10-12','10-26','SUBMISSION OF DELIVERY APPROVAL DOC TO SMC BY QA','t'],['c','10-27','11-04','DELIVERY APPROVAL FROM SMC','m']])
+ ],
+ hol:[{s:"2026-08-14",e:"2026-08-14",l:"INDEPENDENCE DAY"},{s:"2026-08-17",e:"2026-08-21",l:"SHUTDOWN 17 - 21 AUG'26"},{s:"2026-08-26",e:"2026-08-26",l:"EID MILAD-UN-NABI (P.B.U.H)"}],
+ rem:["PE & WELD SHOP IS RESPONSIBLE FOR PILOT KASHI SCHEDULE.","SOP (AB ON) WILL BE 03-SEP'26 (Tentative)","QA AND CONCERN SHOP ARE RESPONSIBLE TO MEASURE WEIGHT AS PER QTY TABLE","ENGINE AND CHASSIS NUMBERS WILL BE PROVIDED BY PRODUCTION CONTROL","AS INFORMED BY IMD, BY SEA FIRM SHIPMENT CAN BE CONFIRMED 15 DAYS EARLIER WITH CONFIRMED BOOKING AT SHIPPING LINE.","COMP 07 IS TRIAL VEHICLE AS REQUIRED BY QA, QA requested to remove its Pre SQR.","SQR/DQR WILL BE DONE IN COMP 1, 2 & 5 ON 12-AUG'26.","REASON OF REVISION, DUE TO DELAY IN ACTIVITIES PERTAINING TO CLEARANCE OF PILOT KIT.","C7, C1 & C2 WHITE BODIES ASSEMBLE USING REMAINING KASHI PARTS."],
+ veh:[V('COMP 01','GJC','SMC','O'),V('COMP 02','GJB','PSMC','O'),V('COMP 03','GJB','PSMC','O'),V('COMP 04','F2R','PSMC','X'),V('COMP 05','FRF','PSMC','X'),V('COMP 06','GJC','PSMC','X'),V('COMP 07','26U','PSMC','X'),...[8,9,10,11,12].map(n=>V('W/B '+String(n).padStart(2,'0'),'-','PSMC (Kashi)','')),V('W/B 13','ED','PSMC (PE)',''),V('W/B 14','ED','PSMC (PE)','')],
+ ship:{t:"YTB ADAS VEHICLE SHIPMENT SCHEDULE (BY SEA)",r:[["ETD PSMC (COMP 01)","2026-08-21","2026-08-27","2026-10-05","SEA"]]}
+});
+let S;try{S=JSON.parse(localStorage.getItem('plan4'))}catch(e){}
+S=S||SAMPLE();
+const U=s=>Date.parse(s+'T00:00:00Z'),DAY=864e5;
+const E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const sv=()=>{try{localStorage.setItem('plan4',JSON.stringify(S))}catch(e){}};
+
+function RP0(){
+ sh.style.width=SW+'px';
+ const F0=U(S.from),T0=U(S.to),d0=U(S.df),d1=U(S.dt),cells=[];
+ const push=(s,n,k)=>cells.push({s,n,k,w:k=='d'?1:2*n/7});
+ for(let t=F0;t<d0&&t<=T0;t+=7*DAY)push(t,Math.min(7,(Math.min(d0,T0+DAY)-t)/DAY),'w');
+ for(let t=Math.max(F0,d0);t<=Math.min(T0,d1);t+=DAY)push(t,1,'d');
+ for(let t=Math.max(d1+DAY,F0);t<=T0;t+=7*DAY)push(t,Math.min(7,(T0+DAY-t)/DAY),'w');
+ let tot=0;cells.forEach(c=>{c.x=tot;tot+=c.w});
+ const X=m=>{for(const c of cells)if(m>=c.s&&m<c.s+c.n*DAY)return(c.x+(m-c.s)/DAY/c.n*c.w)/tot*100;return m<cells[0].s?0:100};
+ let mo=[],cur='',r1='',r2='',wk='',gl='';
+ cells.forEach(c=>{const d=new Date(c.s),k=d.getUTCMonth()+'-'+d.getUTCFullYear(),w=c.w/tot*100,wd=d.getUTCDay(),we=c.k=='d'&&(wd==0||wd==6);
+  if(k!=cur){mo.push([MN[d.getUTCMonth()]+"'"+String(d.getUTCFullYear()).slice(2),0]);cur=k}
+  mo[mo.length-1][1]+=w;
+  r1+=`<i class="${we?'we':''}" style="width:${w}%">${c.k=='d'?d.getUTCDate():Math.ceil(d.getUTCDate()/7)}</i>`;
+  r2+=`<i class="${we?'we':''}" style="width:${w}%">${c.k=='d'?['S','M','T','W','T','F','S'][wd]:'WK'}</i>`;
+  gl+=`<u class="gl" style="left:${c.x/tot*100}%;width:${w}%"></u>`;
+  if(we)wk+=`<u class="we" style="left:${c.x/tot*100}%;width:${w}%"></u>`});
+ const hol=S.hol.filter(h=>h.s&&U(h.s)<=T0&&U(h.e||h.s)>=F0);
+ const hr=h=>{const a=X(Math.max(U(h.s),F0)),b=X(Math.min(U(h.e||h.s),T0)+DAY);return[a,b-a]};
+ const hs=hol.map(h=>{const[a,w]=hr(h);return `<u class="h" style="left:${a}%;width:${w}%"></u>`}).join('');
+ const hl=hol.map(h=>{const[a,w]=hr(h),lg=w>4;return lg?`<div class="hl h" style="left:${a}%;width:${w}%;top:@H@px">${E(h.l)}</div>`:`<div class="hl" style="left:${a}%;top:@V@px">${E(h.l)}</div>`}).join('');
+ const TW=(SW-16)*.756,CW=.56,HT=[];
+ const mt=(s,f)=>Math.max(0,...String(s||'').split('|').map(t=>t.length))*f*CW;
+ const rows=S.acts.map((a,i)=>{
+  const bx=[];
+  a.items.forEach(x=>{
+   if(!x.s)return;const sT=U(x.s),eT=U(x.e||x.s);if(sT>T0||eT<F0)return;
+   const l=X(Math.max(sT,F0)),w=Math.max(X(Math.min(eT,T0)+DAY)-l,.3),L=l/100*TW,Wd=w/100*TW,n=String(x.l||'').split('|').length,tw=mt(x.l,x.t=='c'?7.5:x.t=='t'?8.5:8),o={x,l,w,lab:E(x.l).replace(/\|/g,'<br>')};
+   if(x.t=='c'){const bw=x.e?Wd:tw+8,ln=x.e?Math.max(n,Math.ceil(tw/Math.max(bw-8,10))):n;o.x0=L;o.x1=L+bw;o.h=ln*8.7+3+9}
+   else if(x.t=='t'){o.x0=L+Wd/2-tw/2-1;o.x1=L+Wd/2+tw/2+1;o.h=n*9.8}
+   else if(x.t=='a'){o.x0=L;o.x1=Math.max(L+Wd,L+tw);o.h=(x.l?10:0)+6}
+   else if(x.t=='m'){o.x0=L;o.x1=L+16+tw;o.h=15}
+   else{o.x0=L;o.x1=Math.max(L+Wd,L+tw+5);o.h=15}
+   bx.push(o)});
+  bx.sort((p,q)=>p.x0-q.x0);
+  let rh=50,done=false;
+  for(let t=0;t<40&&!done;t++){const pl=[];done=true;
+   for(const o of bx){
+    const pref=o.x.p=='t'?2:o.x.p=='b'?rh-o.h-2:Math.round((rh-o.h)/2),ys=[pref];for(let y=2;y<=rh-o.h-1;y++)ys.push(y);
+    const y=ys.find(y=>y>=1&&y+o.h<=rh-1&&pl.every(q=>q.x1+2<=o.x0||o.x1+2<=q.x0||q.y+q.h+1<=y||y+o.h+1<=q.y));
+    if(y===undefined){rh+=6;done=false;break}
+    o.y=y;pl.push(o)}}
+  HT.push(rh);
+  const it=bx.map(o=>{const x=o.x,l=o.l,w=o.w,y=o.y,lab=o.lab;
+   if(x.t=='a')return `<div class="aw" style="left:${l}%;width:${w}%;top:${y}px;height:${o.h}px"><b>${lab}</b><span class="al"></span></div>`;
+   if(x.t=='m')return `<em class="mk" style="left:${l}%;top:${y}px">▲<s>${lab}</s></em>`;
+   if(x.t=='c')return `<div class="co ${x.e?'wr':''}" style="left:${l}%;${x.e?`width:${w}%;`:''}top:${y}px"><div class="cb" style="background:${COL[x.c]||'#fff'}">${lab}</div><q>▲</q></div>`;
+   if(x.t=='t')return `<div class="tx" style="left:${l+w/2}%;top:${y}px;transform:translateX(-50%)">${lab}</div>`;
+   return `<span class="bar" style="left:${l}%;width:${w}%;background:${COL[x.c]||COL.o};top:${y}px">${lab}</span>`}).join('');
+  return `<div class="r" style="height:${rh}px"><div class="c1">${i+1}</div><div class="c2">${E(a.n)}</div><div class="c3" style="white-space:pre-line">${E(a.r)}</div><div class="tl">${wk}${hs}${gl}${it}</div></div>`}).join('');
+ const tv=HT.slice(0,6).reduce((a,b)=>a+b,0)+2,th=HT.slice(0,9).reduce((a,b)=>a+b,0)+4;
+ const ap=S.appr.split(',').map(s=>`<div>${E(s.trim())}</div>`).join('');
+ const M3=m=>['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m],fd=s=>{if(!s)return'';const d=new Date(s+'T00:00:00Z');return String(d.getUTCDate()).padStart(2,'0')+'-'+M3(d.getUTCMonth())+'-'+String(d.getUTCFullYear()).slice(2)};
+ const vt=(wt)=>`<table class="v"><tr><th>S.No</th><th>Assy Type</th><th>Version</th><th>Color Code</th><th>Color</th><th>Owner</th>${wt?'<th>White Body Weight</th><th>Paint Body Weight</th><th>Complete Vehicle Weight</th>':''}</tr>${S.veh.map((v,i)=>[v,i]).filter(([v])=>(v.w!=='')==wt).map(([v,i])=>`<tr><td>${i+1}</td><td>${E(v.a)}</td><td>${E(v.v)}</td><td>${E(v.c)}</td><td>${E(CC[v.c]||'')}</td><td>${E(v.o)}</td>${wt?`<td>${E(v.w)}</td><td>${E(v.p)}</td><td>${E(v.t)}</td>`:''}</tr>`).join('')}</table>`;
+ const st=`<b style="font-size:8px">${E(S.ship.t)}</b><table class="v"><tr><th>DESCRIPTION</th><th>ETD PSMC</th><th>ETD PORT</th><th>ETA JAPAN</th><th>MODE</th></tr>${S.ship.r.map(r=>`<tr><td>${E(r[0])}</td><td>${fd(r[1])}</td><td>${fd(r[2])}</td><td>${fd(r[3])}</td><td>${E(r[4])}</td></tr>`).join('')}</table>`;
+ sh.innerHTML=`<div class="ap">${ap}</div>
+ <div class="tt"><b>${E(S.title)}</b><span>${E(S.dept)}</span><span>${E(S.div)}</span><span>${E(S.rev)}</span><span class="d">DATE: ${E(S.date)}</span></div>
+ <div class="hd"><div class="c1">S.NO</div><div class="c2">ACTIVITIES</div><div class="c3">RESPONSIBLE</div>
+ <div class="tl"><div class="mo">${mo.map(m=>`<b style="width:${m[1]}%">${m[0]}</b>`).join('')}</div><div class="l">${r1}</div><div class="l">${r2}</div></div></div>
+ <div id="bd">${rows}<div id="ov">${hl.replace(/@V@/g,tv).replace(/@H@/g,th)}</div></div>
+ <div class="ft"><div class="rm"><b>REMARKS:</b>${S.rem.map((r,i)=>`<div>${i+1}. ${E(r)}</div>`).join('')}</div>${vt(true)}${vt(false)}<div>${st}</div></div>
+ <div class="fo">${S.foot.split('|').map(x=>`<span>${E(x)}</span>`).join('')}</div>`;
+ sv()}
+
+function RP(){
+ for(let k=0;k<4;k++){RP0();const z=sh.style.zoom;sh.style.zoom=1;const H=sh.offsetHeight;sh.style.zoom=z;const n=Math.max(1600,Math.round(H*1.43));if(Math.abs(n-SW)<20||k==3)break;SW=n}
+ sv();if(window.fitCb)window.fitCb()}
+const F=(k,l,t)=>`<label>${l}</label><input ${t?`type="${t}"`:''} value="${E(S[k])}" oninput="S.${k}=this.value;RP()">`;
+const OP=(o,v)=>Object.entries(o).map(([k,l])=>`<option value="${k}" ${v==k?'selected':''}>${l}</option>`).join('');
+const LBLS=[...new Set(SAMPLE().acts.flatMap(a=>a.items.map(x=>x.l)).concat(['C 1','C 2','C 3','C 4','C 5','C 6','C 7']).filter(Boolean))];
+const RESP=[...new Set(PRE.map(q=>q[1]))],NAMES=PRE.map(q=>q[0]),REMS=SAMPLE().rem;
+const HOLS=['INDEPENDENCE DAY',"SHUTDOWN 17 - 21 AUG'26",'EID MILAD-UN-NABI (P.B.U.H)','HOLIDAY'];
+const REVS=Array.from({length:10},(_,i)=>'Revision:0'+i),NO=n=>String(n).padStart(2,'0');
+const ASSY=[1,2,3,4,5,6,7].map(n=>'COMP '+NO(n)).concat([8,9,10,11,12,13,14].map(n=>'W/B '+NO(n))),OWN=['SMC','PSMC','PSMC (Kashi)','PSMC (PE)'],DESC=[1,2,3,4,5,6,7].map(n=>'ETD PSMC (COMP '+NO(n)+')');
+const MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const TPL=[['Arrow ↔ (order / receiving)','a','m','o',''],['Callout box ▲','c','t','w',''],['Triangle ▲','m','m','o',''],['Bar','b','m','o',''],['Text: C 7','t','m','o','C 7'],['Text: C 1 / C 2','t','m','o','C 1|C 2'],['Text: C 5 / C 3 / C 4 / C 6','t','m','o','C 5|C 3|C 4|C 6'],['Text: C 7 / C 1 / C 2','t','m','o','C 7|C 1|C 2'],['Text: C 1 / C 2 / C 5','t','m','o','C 1|C 2|C 5'],['Text: WB 13 / WB 14','t','m','o','WB 13|WB 14'],['Text: ED only','t','m','o','ED only']];
+const iso=d=>d.toISOString().slice(0,10),addD=(s,n)=>iso(new Date(U(s)+n*DAY)),fmtD=v=>{if(!v)return S.date;const[y,m,d]=v.split('-');return `${+d}-${MON[+m-1]}-${y}`};
+const gp=p=>{let o=S;for(const k of p.split('.'))o=o[k];return o};
+const sp=(p,v)=>{const k=p.split('.');let o=S;for(let i=0;i<k.length-1;i++)o=o[k[i]];o[k[k.length-1]]=v};
+const SL=(list,cur,path,lf)=>{const l=(cur===''||cur==null||list.includes(cur))?list:[cur].concat(list);return `<select onchange="pick(this,'${path}')"><option value="">— select —</option>${l.map(v=>`<option value="${E(v)}" ${v===cur?'selected':''}>${lf?E(lf(v)):E(v).replace(/\|/g,' / ')}</option>`).join('')}<option value="__e">✎ Edit / other…</option></select>`};
+function keep(){const st=ed.scrollTop;RE();ed.scrollTop=st;RP()}
+function pick(el,path){let v=el.value;if(v=='__e'){v=prompt('Text edit karein (| = new line):',gp(path));if(v===null){RE();return}}
+ sp(path,v);if(/^acts\.\d+\.n$/.test(path)){const m=PRE.find(q=>q[0]==v);if(m)sp(path.replace(/\.n$/,'.r'),m[1])}keep()}
+function addI(i,k){if(k==='')return;const t=TPL[+k];S.acts[i].items.push({t:t[1],p:t[2],c:t[3],l:t[4],s:S.df,e:''});keep()}
+function addR(k){if(k==='')return;const t=k=='-1'?prompt('Naya remark:'):REMS[+k];if(t)S.rem.push(t);keep()}
+function shipD(i,v){const r=S.ship.r[i];r[1]=v;r[2]=addD(v,6);r[3]=addD(v,45);keep()}
+function shiftAll(n){if(!n)return;const f=x=>x?addD(x,n):x;S.acts.forEach(a=>a.items.forEach(x=>{x.s=f(x.s);x.e=f(x.e)}));S.hol.forEach(x=>{x.s=f(x.s);x.e=f(x.e)});keep()}
+function fillAll(){PRE.forEach(q=>{if(!S.acts.some(a=>a.n==q[0]))S.acts.push({n:q[0],r:q[1],items:[]})});keep()}
+function fitTL(){const d=[];S.acts.forEach(a=>a.items.forEach(x=>{if(x.s)d.push(x.s);if(x.e)d.push(x.e)}));S.hol.forEach(x=>{if(x.s)d.push(x.s);if(x.e)d.push(x.e)});if(!d.length)return;d.sort();S.from=addD(d[0],-7);S.to=addD(d[d.length-1],7);keep();fit()}
+function fixAll(){S.acts.forEach(a=>a.items.forEach(x=>{if(x.s&&x.e&&U(x.e)<U(x.s))[x.s,x.e]=[x.e,x.s]}));if(U(S.dt)<U(S.df))[S.df,S.dt]=[S.dt,S.df];if(U(S.to)<U(S.from))[S.from,S.to]=[S.to,S.from];keep()}
+function validate(){const w=[],F0=U(S.from),T0=U(S.to);S.acts.forEach((a,i)=>a.items.forEach(x=>{const id=`#${i+1} ${a.n.slice(0,24)}`;if(!x.s)w.push(id+': start date missing');else{if(x.e&&U(x.e)<U(x.s))w.push(id+': end is before start');if(U(x.s)>T0||U(x.e||x.s)<F0)w.push(id+': outside the timeline (use Fit timeline)')}if(!x.l&&x.t!='m'&&x.t!='a')w.push(id+': text missing')}));if(U(S.dt)<U(S.df))w.push('Daily range ends before it starts');if(F0>T0)w.push('Timeline ends before it starts');return w}
+function exp(){try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='plan.json';a.click()}catch(e){alert('Export yahan block hai; deployed site par chalega.')}}
+function imp(el){const f=el.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{S=JSON.parse(r.result);RE();RP()}catch(e){alert('Ye plan file sahi nahi hai.')}};r.readAsText(f)}
+const SEC=(c,t,b)=>`<section class="sec" style="--sc:${c}"><h2>${t}</h2><div class="bd">${b}</div></section>`;
+function RE(){
+ const w=validate(),ni=S.acts.reduce((n,a)=>n+a.items.length,0),wk=Math.max(0,Math.round((U(S.to)-U(S.from))/DAY/7));
+ ed.innerHTML=`<h1>📅 Plan Generator</h1>
+ <div class="kpi"><div style="--k:#2563eb"><b>${S.acts.length}</b>Activities</div><div style="--k:#0d9488"><b>${ni}</b>Arrows / boxes</div><div style="--k:#7c3aed"><b>${wk}</b>Weeks</div><div style="--k:${w.length?'#dc2626':'#16a34a'}"><b>${w.length}</b>Issues</div></div>
+ ${w.length?`<div class="warn"><b>⚠ ${w.length} issue(s)</b>${w.slice(0,6).map(m=>`<div>• ${E(m)}</div>`).join('')}<button onclick="fixAll()">Auto-fix dates</button></div>`:'<div class="ok">✓ Zero issues. Plan PDF ke liye ready hai.</div>'}
+ <div class="top"><button onclick="window.print()">⬇ Save as PDF</button><button class="g" onclick="fitTL()">Fit timeline</button><button class="g" onclick="fillAll()">+ All 25 activities</button>
+ <select onchange="shiftAll(+this.value)"><option value="">⇄ Shift all dates…</option>${[-14,-7,-1,1,7,14].map(d=>`<option value="${d}">${d>0?'+':''}${d} days</option>`).join('')}</select>
+ <button class="g" onclick="exp()">Export</button><label class="fl">Import<input type="file" accept=".json" onchange="imp(this)" hidden></label><button class="g" onclick="if(confirm('Reset to sample plan?')){S=SAMPLE();RE();RP()}">Reset</button></div>
+ <small>PDF: paper A3, Landscape, Background graphics ON.</small>
+ ${SEC('#2563eb','1 · Header',`${F('title','Plan title')}${F('dept','Department')}${F('div','Division')}
+ <div class="row"><div><label>Revision</label>${SL(REVS,S.rev,'rev')}</div><div><label>Date</label><input type="date" oninput="S.date=fmtD(this.value);RP()"></div><button class="g s" onclick="S.date=fmtD(iso(new Date()));keep()">Today</button></div><small>Abhi: ${E(S.date)}</small>
+ <div class="row"><div>${F('from','Timeline start','date')}</div><div>${F('to','Timeline end','date')}</div></div>
+ <div class="row"><div>${F('df','Daily columns from','date')}</div><div>${F('dt','Daily columns to','date')}</div></div>
+ ${F('appr','Approval boxes (comma separated)')}${F('foot','Footer (left|centre|right)')}`)}
+ ${SEC('#0d9488','2 · Activities',`<div class="row"><select id="np"><option value="-1">Custom activity</option>${PRE.map((q,i)=>`<option value="${i}">${E(q[0])}</option>`).join('')}</select><button class="s" onclick="addA()">Add</button></div>
+ ${S.acts.map((a,i)=>`<div class="card"><label>Activity #${i+1}</label>${SL(NAMES,a.n,`acts.${i}.n`)}<label>Responsible</label>${SL(RESP,a.r,`acts.${i}.r`)}
+  ${a.items.map((x,j)=>{const p=`S.acts[${i}].items[${j}]`;return `<div class="it" style="--ic:${x.c=='w'?'#94a3b8':COL[x.c]||'#fbd9b0'}">
+  <div><label>Start</label><input type="date" value="${x.s}" oninput="${p}.s=this.value;RP()" onchange="keep()"></div>
+  <div><label>End (optional)</label><input type="date" value="${x.e}" oninput="${p}.e=this.value;RP()" onchange="keep()"></div>
+  <div class="w"><label>Text</label>${SL(LBLS,x.l,`acts.${i}.items.${j}.l`)}</div>
+  <div><label>Type</label><select onchange="${p}.t=this.value;RP()">${OP({b:'Bar',a:'Arrow ↔',m:'Triangle ▲',c:'Callout box ▲',t:'Text (C 1, C 7…)'},x.t)}</select></div>
+  <div><label>Position in row</label><select onchange="${p}.p=this.value;RP()">${OP({t:'Top',m:'Middle',b:'Bottom'},x.p)}</select></div>
+  <div class="w"><label>Colour</label><select onchange="${p}.c=this.value;keep()">${OP({o:'Orange',g:'Green',b:'Blue',r:'Red',y:'Yellow',k:'Grey',w:'White'},x.c)}</select></div>
+  <button class="x" onclick="S.acts[${i}].items.splice(${j},1);keep()">Remove</button></div>`}).join('')}
+  <div class="top" style="margin-top:10px"><select onchange="addI(${i},this.value)"><option value="">+ Add arrow / box / triangle / text…</option>${TPL.map((t,k)=>`<option value="${k}">${t[0]}</option>`).join('')}</select>
+  <button class="g" onclick="mv(${i},-1)">↑</button><button class="g" onclick="mv(${i},1)">↓</button><button class="x" onclick="S.acts.splice(${i},1);keep()">Delete</button></div></div>`).join('')}`)}
+ ${SEC('#ea580c','3 · Holidays / shutdowns',`${S.hol.map((h,i)=>`<div class="card"><label>Label</label>${SL(HOLS,h.l,`hol.${i}.l`)}
+  <div class="row"><div><label>From</label><input type="date" value="${h.s}" oninput="S.hol[${i}].s=this.value;RP()"></div><div><label>To</label><input type="date" value="${h.e}" oninput="S.hol[${i}].e=this.value;RP()"></div>
+  <button class="x s" onclick="S.hol.splice(${i},1);keep()">✕</button></div></div>`).join('')}<button class="g" onclick="S.hol.push({s:S.from,e:S.from,l:'HOLIDAY'});keep()">+ Holiday / shutdown</button>`)}
+ ${SEC('#7c3aed','4 · Remarks',`${S.rem.map((r,i)=>`<label>Remark ${i+1}</label><div class="row">${SL(REMS,r,`rem.${i}`)}<button class="x s" onclick="S.rem.splice(${i},1);keep()">✕</button></div>`).join('')}
+ <div class="top"><select onchange="addR(this.value)"><option value="">+ Add remark…</option>${REMS.map((t,k)=>`<option value="${k}">${E(t.slice(0,60))}</option>`).join('')}<option value="-1">✎ Write new…</option></select></div>`)}
+ ${SEC('#16a34a','5 · Vehicle &amp; colour tables',`<small>Colour code chunein, colour ka naam khud aa jata hai.</small>${S.veh.map((v,i)=>`<div class="it" style="--ic:${v.w!==''?'#16a34a':'#94a3b8'}"><div class="w"><label>#${i+1} Assy type</label>${SL(ASSY,v.a,`veh.${i}.a`)}</div>
+  <div><label>Version</label>${SL(['YTBN1CXNP42'],v.v,`veh.${i}.v`)}</div><div><label>Owner</label>${SL(OWN,v.o,`veh.${i}.o`)}</div>
+  <div class="w"><label>Colour code</label>${SL(Object.keys(CC),v.c,`veh.${i}.c`,k=>k+' — '+CC[k])}</div>
+  ${v.w!==''?['w','p','t'].map((k,n)=>`<div${n==2?' class="w"':''}><label>${['White body','Paint body','Complete vehicle'][n]} weight</label>${SL(['O','X'],v[k],`veh.${i}.${k}`)}</div>`).join(''):''}
+  <button class="x" onclick="S.veh.splice(${i},1);keep()">Remove</button></div>`).join('')}
+  <div class="top"><button class="g" onclick="S.veh.push({a:'COMP 08',v:'YTBN1CXNP42',c:'GJC',o:'PSMC',w:'X',p:'X',t:'X'});keep()">+ Vehicle (with weights)</button><button class="g" onclick="S.veh.push({a:'W/B 15',v:'YTBN1CXNP42',c:'-',o:'PSMC (Kashi)',w:'',p:'',t:''});keep()">+ W/B body</button></div>`)}
+ ${SEC('#db2777','6 · Shipment schedule',`<label>Table title</label>${SL(['YTB ADAS VEHICLE SHIPMENT SCHEDULE (BY SEA)'],S.ship.t,'ship.t')}
+ ${S.ship.r.map((r,i)=>`<div class="it"><div class="w"><label>Description</label>${SL(DESC,r[0],`ship.r.${i}.0`)}</div>
+  <div><label>ETD PSMC</label><input type="date" value="${r[1]}" onchange="shipD(${i},this.value)"></div><div><label>Mode</label>${SL(['SEA','AIR'],r[4],`ship.r.${i}.4`)}</div>
+  <div><label>ETD Port (auto +6 days)</label><input type="date" value="${r[2]}" oninput="S.ship.r[${i}][2]=this.value;RP()"></div><div><label>ETA Japan (auto +45 days)</label><input type="date" value="${r[3]}" oninput="S.ship.r[${i}][3]=this.value;RP()"></div>
+  <button class="x" onclick="S.ship.r.splice(${i},1);keep()">Remove</button></div>`).join('')}
+ <div class="top"><button class="g" onclick="S.ship.r.push(['ETD PSMC (COMP 02)',S.df,addD(S.df,6),addD(S.df,45),'SEA']);keep()">+ Shipment row</button></div>`)}`}
+function addA(){const i=+document.getElementById('np').value;S.acts.push(i<0?{n:'NEW ACTIVITY',r:'',items:[]}:{n:PRE[i][0],r:PRE[i][1],items:[]});RE();RP();ed.scrollTop=ed.scrollHeight}
+function mv(i,d){const j=i+d;if(j<0||j>=S.acts.length)return;[S.acts[i],S.acts[j]]=[S.acts[j],S.acts[i]];RE();RP()}
+RE();RP();
+let Z=1,auto=true;
+function setZ(z,a){auto=!!a;Z=Math.max(.3,Math.min(2,z));sh.style.zoom=Z;document.getElementById('zl').textContent=Math.round(Z*100)+'%'}
+function fit(){setZ(Math.min(1,(pv.clientWidth-28)/SW),true)}
+addEventListener('resize',()=>auto&&fit());
+addEventListener('beforeprint',()=>{sh.style.zoom=1;const H=sh.offsetHeight;sh.style.zoom=Math.min(1542/SW,1077/H)});
+addEventListener('afterprint',()=>setZ(Z,auto));
+window.fitCb=()=>{if(auto)fit()};
+fit();
+</script></body></html>
